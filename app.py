@@ -1,13 +1,14 @@
-from bot import run
+from bot import runner
 
 
 def app_run():
     while True:
         try:
-            run.run()
+            runner.run()
         except Exception as e:
-            with open('/home/MBkkt/VkSupremeGroupBot/data/log.txt', 'a') as log_file:
+            with open(r'/absolute/path/to/your/data/log.txt', 'a') as log_file:
                 log_file.write(str(e) + '\n\n')
 
 
-app_run()
+if __name__ == '__main__':
+    app_run()

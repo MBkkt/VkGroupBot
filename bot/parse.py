@@ -8,7 +8,7 @@ def parseMessage(text: str):
         if word in (
                 'hi', 'hello', 'goodmorning', 'about',
                 'привет', 'здраствуй', 'здраствуйте', 'ку', 'здаров', 'прив', 'хай',):
-            return 'hello'
+            return 'hi'
 
         elif word in ('report', 'репорт'):
             return 'report'
@@ -29,4 +29,4 @@ def parseMessage(text: str):
         elif word in ('advert', 'реклмама'):
             return 'advert'
 
-    return 'hello'
+    return 'hi'
