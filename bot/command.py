@@ -8,7 +8,7 @@ class Command:
         self.user_id = 0
         self.user_msg = 0
         self.random_id = 42
-        self.dict_text = {
+        self.commands = {
             'hi': (
                 ''
             ),
@@ -46,7 +46,7 @@ class Command:
         )
 
     def sendMsg(self, msg_type):
-        self._sendToVk(self.dict_text[msg_type])
+        self._sendToVk(self.commands[msg_type])
         if msg_type in ('report', 'advert'):
             with open(f'/absolute/path/to/your/data/{msg_type}.txt', 'a') as file:
                 file.write(self.user_msg + f'\nby user: https://vk.com/id{self.user_id}\n\n')
