@@ -1,32 +1,54 @@
-def parseMessage(text: str):
-    words = text.strip().lower().split()
-
-    if any(word in words[0] for word in ('команда вашего callback бота например',)):
-        return None
-
-    for word in words:
-        if word in (
+class Parse:
+    def __init__(self):
+        self.msg_words = {
+            'hi': (
                 'hi', 'hello', 'goodmorning', 'about',
-                'привет', 'здраствуй', 'здраствуйте', 'ку', 'здаров', 'прив', 'хай',):
-            return 'hi'
+                'привет', 'здраствуй', 'здраствуйте', 'ку', 'здаров', 'прив', 'хай',
+            ),
 
-        elif word in ('report', 'репорт'):
-            return 'report'
+            'report': (
+                'report', 'репорт'
+            ),
 
-        elif word in (
+            'product': (
                 'product', 'products', 'buy',
-                'купить', 'товары', 'товар', 'продукты', 'продукт',):
-            return 'product'
+                'купить', 'товары', 'товар', 'продукты', 'продукт',
+            ),
 
-        elif word in (
+            'help': (
                 'help', 'command', 'commands',
-                'помощь', 'помогите', 'команды', 'команда',):
-            return 'help'
+                'помощь', 'помогите', 'команды', 'команда',
+            ),
+            'faq': (
+                'faq', 'инструкция',
+            ),
 
-        elif word in ('faq', 'инструкция',):
-            return 'faq'
+            'advert': (
+                'advert', 'реклама'
+            ),
+            'noncallable': (
+                'команда другого вашего бота например'
+            ),
+        }
 
-        elif word in ('advert', 'реклмама'):
-            return 'advert'
+    def parse_msg(self, text: str):
+        words = text.strip().lower().split()
+        if words[0] in self.msg_words['noncallable']:
+            return None
+        for word in words:
+            if word in self.msg_words['hi']:
+                return 'hi'
+            if word in self.msg_words['report']:
+                return 'report'
+            if word in self.msg_words['product']:
+                return 'product'
+            if word in self.msg_words['help']:
+                return 'help'
+            if word in self.msg_words['faq']:
+                return 'faq'
+            if word in self.msg_words['advert']:
+                return 'advert'
+        return 'hi'
 
-    return 'hi'
+
+PARSER = Parse()

@@ -1,1 +1,2 @@
-# VkGroupBot with long poll bots api
+# VkGroupBot
+Callback bot with vk-api and Flask

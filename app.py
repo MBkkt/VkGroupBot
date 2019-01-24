@@ -1,14 +1,10 @@
-from bot import runner
-
-
-def app_run():
-    while True:
-        try:
-            runner.run()
-        except Exception as e:
-            with open(r'/absolute/path/to/your/data/log.txt', 'a') as log_file:
-                log_file.write(str(e) + '\n\n')
-
+from bot.flask_app import app
+from tools.save import SAVER
 
 if __name__ == '__main__':
-    app_run()
+    try:
+        app.run()
+    except Exception as e:
+        SAVER.log(str(e))
+else:
+    SAVER.log('Not main')

@@ -1,14 +1,20 @@
-from random import randint
+import random
+from vk_api import VkApi
 
-from bot import vk
+from bot.parse import PARSER
+from config import CONFIG
+from tools.save import SAVER
+
+VK = VkApi(token=CONFIG.token).get_api()
 
 
 class Command:
     def __init__(self):
         self.user_id = 0
-        self.user_msg = 0
+        self.type_msg = ''
+        self.user_msg = ''
         self.random_id = 42
-        self.commands = {
+        self.ans_text = {
             'hi': (
                 ''
             ),
@@ -16,8 +22,7 @@ class Command:
                 ''
             ),
             'help': (
-                'Список команд: help \n'
-                'О боте: about '
+                ''
             ),
             'faq': (
                 ''
@@ -26,27 +31,35 @@ class Command:
                 ''
             ),
             'report': (
-                'Спасибо за это сообщение, мы постараемся это исправить в ближайшее время '
+                ''
             ),
             'advert': (
-                'Мы напишем вам, если нас заинтересует ваше предложение '
+                ''
             ),
         }
 
     def __call__(self, event):
         self.user_id = event.object.from_id
         self.user_msg = event.object.text
-        self.random_id = randint(1, 10000)
+        self.random_id = random.randint(-4294967296, 4294967295)  # int32
 
-    def _sendToVk(self, text):
-        vk.messages.send(
+    def new_msg(self):
+        self.type_msg = PARSER.parse_msg(self.user_msg)
+
+    def send_msg(self):
+        self._send(self.ans_text[self.type_msg])
+        if self.type_msg in ('report', 'advert'):
+            self._save()
+
+    def _send(self, text):
+        VK.messages.send(
             user_id=self.user_id,
             random_id=self.random_id,
             message=text,
         )
 
-    def sendMsg(self, msg_type):
-        self._sendToVk(self.commands[msg_type])
-        if msg_type in ('report', 'advert'):
-            with open(f'/absolute/path/to/your/data/{msg_type}.txt', 'a') as file:
-                file.write(self.user_msg + f'\nby user: https://vk.com/id{self.user_id}\n\n')
+    def _save(self):
+        SAVER.msg(self.type_msg, self.user_msg, self.user_id)
+
+
+COMMAND = Command()
