@@ -1,10 +1,10 @@
-import os
+import os.path
 from datetime import datetime
 
 
 class Saver:
     def __init__(self):
-        self.path = ''
+        self.path = os.path.abspath('data')
         self.text = ''
         self.file = ''
 
@@ -21,6 +21,3 @@ class Saver:
         self.text = f'{text}\nby user: https://vk.com/id{user_id}'
         self.file = f'{type_msg}.txt'
         self._save()
-
-
-SAVER = Saver()

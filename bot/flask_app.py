@@ -1,9 +1,9 @@
 from flask import Flask, request, json, abort, make_response, jsonify
 from vk_api.bot_longpoll import VkBotEventType, VkBotEvent
 
-from bot.command import COMMAND
-from tools.save import SAVER
+from bot.command import Command
 from config import CONFIG
+from tools.save import Saver
 
 app = Flask(__name__)
 
@@ -30,19 +30,19 @@ def processing():
         if event['type'] == 'confirmation':
             return CONFIG.confirmation
         event = VkBotEvent(event)
+        command = Command(event)
     except Exception as e:
-        SAVER.log(str(e))
+        Saver().log(str(e))
         abort(400)
-
-    COMMAND(event)
-    if event.type == VkBotEventType.MESSAGE_NEW:
-        COMMAND.new_msg()
-        if COMMAND.type_msg is not None:
-            COMMAND.send_msg()
-    elif event.type == VkBotEventType.GROUP_JOIN:
-        COMMAND.type_msg = 'hi'
-        COMMAND.send_msg()
-    elif event.type == VkBotEventType.GROUP_LEAVE:
-        COMMAND.type_msg = 'bye'
-        COMMAND.send_msg()
-    return 'ok'
+    else:
+        if event.type == VkBotEventType.MESSAGE_NEW:
+            command.new_msg()
+            if command.type_msg is not None:
+                command.send_msg()
+        elif event.type == VkBotEventType.GROUP_JOIN:
+            command.type_msg = 'hi'
+            command.send_msg()
+        elif event.type == VkBotEventType.GROUP_LEAVE:
+            command.type_msg = 'bye'
+            command.send_msg()
+        return 'ok'

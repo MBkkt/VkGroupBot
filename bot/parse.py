@@ -1,4 +1,4 @@
-class Parse:
+class Parser:
     def __init__(self):
         self.msg_words = {
             'hi': (
@@ -49,6 +49,3 @@ class Parse:
             if word in self.msg_words['advert']:
                 return 'advert'
         return 'hi'
-
-
-PARSER = Parse()
