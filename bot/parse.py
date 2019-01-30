@@ -26,7 +26,6 @@ class Parser:
         '',
     )
 
-
     @classmethod
     def parse_msg(cls, text: str) -> str:
         words = text.strip().lower().split()
