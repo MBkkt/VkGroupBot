@@ -1,10 +1,17 @@
-from bot.flask_app import app
-from tools.save import Saver
+from logging import getLogger
 
-if __name__ == '__main__':
+errors = getLogger('errors')
+
+
+def run_bot():
     try:
+        from bot.flask_app import app
         app.run()
     except Exception as e:
-        Saver().log(str(e))
+        errors.error(str(e))
+
+
+if __name__ == '__main__':
+    run_bot()
 else:
-    Saver().log('Not main')
+    errors.info('No main')

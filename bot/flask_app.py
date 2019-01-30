@@ -1,9 +1,11 @@
 from flask import Flask, request, json, abort, make_response, jsonify
-from vk_api.bot_longpoll import VkBotEventType, VkBotEvent
+from logging import getLogger
+from vk_api.bot_longpoll import VkBotEvent
 
 from bot.command import Command
 from config import CONFIG
-from tools.save import Saver
+
+errors = getLogger('errors')
 
 app = Flask(__name__)
 
@@ -19,30 +21,20 @@ def not_found():
 
 
 @app.route('/')
-def hello_world():
+def about():
     return 'VKGroupBot by MBkkt'
 
 
 @app.route('/bot', methods=['POST'])
 def processing():
-    event = json.loads(request.data)
     try:
+        event = json.loads(request.data)
         if event['type'] == 'confirmation':
             return CONFIG.confirmation
-        event = VkBotEvent(event)
-        command = Command(event)
+        command = Command(VkBotEvent(event))
     except Exception as e:
-        Saver().log(str(e))
+        errors.error(str(e))
         abort(400)
     else:
-        if event.type == VkBotEventType.MESSAGE_NEW:
-            command.new_msg()
-            if command.type_msg is not None:
-                command.send_msg()
-        elif event.type == VkBotEventType.GROUP_JOIN:
-            command.type_msg = 'hi'
-            command.send_msg()
-        elif event.type == VkBotEventType.GROUP_LEAVE:
-            command.type_msg = 'bye'
-            command.send_msg()
+        command.send_msg()
         return 'ok'
