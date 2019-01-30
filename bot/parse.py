@@ -32,7 +32,7 @@ class Parser:
         if words[0] in cls.noncallable:
             return ''
         for word in words:
-            for command_name in cls.msg_words:
-                if word in cls.msg_words[command_name]:
+            for command_name, synonym in cls.msg_words.items():
+                if word in synonym:
                     return command_name
         return 'hi'
