@@ -18,7 +18,6 @@ class Parser:
         'faq': (
             'faq', 'инструкция',
         ),
-
         'advert': (
             'advert', 'реклама'
         ),
