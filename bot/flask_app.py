@@ -11,12 +11,12 @@ app = Flask(__name__)
 
 
 @app.errorhandler(400)
-def bad_request():
+def bad_request(error):
     return make_response(jsonify({'error': 'Bad request'}), 400)
 
 
 @app.errorhandler(404)
-def not_found():
+def not_found(error):
     return make_response(jsonify({'error': 'Not found this url'}), 404)
 
 
