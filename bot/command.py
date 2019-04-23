@@ -3,7 +3,7 @@ from vk_api import VkApi
 from vk_api.bot_longpoll import VkBotEventType
 from vk_api.utils import get_random_id
 
-from bot.parse import Parser
+import bot.parser as parser
 from config import CONFIG
 
 reports = getLogger('reports')
@@ -48,7 +48,7 @@ class Command:
         self.user_msg = event.object.text
 
         if self.type_event == VkBotEventType.MESSAGE_NEW:
-            self.type_msg = Parser.parse_msg(self.user_msg)
+            self.type_msg = parser.parse_msg(self.user_msg)
         elif self.type_event == VkBotEventType.GROUP_JOIN:
             self.type_msg = 'hi'
         elif self.type_event == VkBotEventType.GROUP_LEAVE:
